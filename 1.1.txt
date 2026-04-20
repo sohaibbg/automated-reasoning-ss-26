@@ -1,0 +1,145 @@
+based on week1/AR-Intro.pdf
+
+1. boolean logic (a.k.a. propositional logic) , the basic units are atomic propositions that are either true or false.
+
+2. You combine them using logical connectives: AND (∧) OR (∨) NOT (¬) IMPLIES (→)
+
+3. You cannot look inside propositions.
+
+You can’t express:
+
+who is raining
+which object is wet
+relationships like “all humans are mortal”
+
+Everything is a black box boolean variable.
+
+4. In first-order logic (FOL), you introduce:
+
+Predicates (properties/relations)
+Variables
+Quantifiers
+
+5. Predicates
+
+Human(x)
+Loves(x,y)
+
+6. Quantifiers
+
+Universal: ∀x (“for all x”)
+Existential: ∃x (“there exists x”)
+
+7. Internal structure
+Propositional:
+P,Q,R (atomic, opaque)
+FOL:
+Loves(Alice,Bob)
+Student(x)∧Enrolled(x,Course1)
+
+8. Quantification
+Propositional: ❌ none
+FOL: ✅
+∀, ∃
+
+This is the biggest conceptual jump.
+
+9. Satisfiability of Propositional Formulas (SAT)
+SAT is NP-complete (i.e. applicability to many other problems)
+
+10. Satisfiability Modulo Theories (SMT)
+extends Satisfiability of Propositional Formulas (SAT)
+with variables over more complex data types e.g. integer, arrays, etc.
+because Boolean logic is insufficient for many problems
+
+11. application example: construct all possible paths as conjunctions of constraints to form a Formula in quantifier-free theory of linear arithmetic
+
+12. in linear arithmetic we only have plus, minus, multiply with constants (not variables) and comparison symbols <= , > , etc.
+
+13. Linear arithmetic is:
+expressive enough for many real problems
+but still decidable and efficiently solvable
+
+14. Syntax
+VAR = a countable set of boolean variables
+Grammar for propositional (a.k.a. boolean) formulas:
+φ ::= ⊤ ∣ ⊥ ∣ x ∣¬φ ∣ φ ∧ φ ∣ φ ∨ φ x ∈ VAR
+
+15. φ → ψ
+phi implies psi
+
+16. I ⊧ φ
+I satisfies phi
+There exists an interpretation satisfying phi
+
+17. An interpretation = assignment of truth values to variables
+
+18. An interpretation for φ (say with variables x1, …, xn) is
+I : {x1, …, xn} → {0,1}
+This function is extended to formulas over x1, …, xn as follows:
+1. I( ⊤ ) = 1, I( ⊥ ) = 0
+2. I( ¬φ) = 1− I(φ)
+3. I(φ ∨ ψ) = max{I(φ), I(ψ)}
+4. I(φ ∧ ψ) = min{I(φ), I(ψ)}
+
+19. Implication
+(φ → ψ) := ( ¬φ ∨ ψ)
+read “φ implies ψ“, or “if φ, then ψ“
+
+20. Double implication
+(φ ↔ ψ) := (φ → ψ) ∧ (ψ → φ)
+read “φ iﬀ ψ“
+
+21. semantic equivalence says
+Two formulas φ, ψ are equivalent (φ ≡ ψ), if for every interpretation I : Var(φ) ∪ Var(ψ) → {0,1} we have I ⊧ φ IFF I ⊧ ψ.
+
+22. Entailment (similar to "implies")
+φ ⊧ ψ
+φ entails ψ if every interpretation satisfying φ satisfies ψ.
+
+24. A formula is said to be valid (a.k.a. a tautology) if all interpretations satisfy φ
+
+25. A formula is valid iff its negation is unsatisfiable
+
+26. Literals: a variable or its negation
+x ¬x
+Clauses: a disjunction of literals
+x ∨ ¬y ∨ z
+Terms: a conjunction of literals
+¬x ∧ y ∧ z
+
+27. Negation Normal Form (NNF): Negation occurs before a variable
+(x ∧ ( ¬y ∨ z)) ∨ ¬z
+
+28. Conjunctive Normal Form (CNF): Conjunction of clauses
+( ¬x ∨ y) ∧ (x ∨ z) ∧ (x′ ￼∨ ¬y ∨ ¬z)
+
+29. Disjunctive Normal Form (DNF): Disjunction of terms
+(x ∧ y ∧ ¬z) ∨ ( ¬x ∧ ¬y)
+
+30. every propositional formula can be
+converted to equivalent formulas in NNF, CNF, and DNF.
+
+31. The conversion to NNF produces formulas of linear size
+
+32. The conversion to DNF and CNF may produce exponential size formulas
+
+33. SAT problem is NP-complete even for CNF formulae
+
+34. Modern SAT algorithms work only on formulas in CNF
+
+35. Naive reduction gives exponential-size formulas
+
+36. in Tseitin’s transformation we
+take propositional formula as input
+convert to NNF by distribution
+equate conjunctive clauses with new variables
+consider equivalence as double implication
+introduce new disjunctive clauses by distributing these DI clauses
+output CNF formula that is equi"satisfiable"
+
+37. introduction of new variables in Tseitin's transformation causes non-equivalence with the prior formula
+
+38. the number of new variables in Tseitin's transformation
+increases linearly to the number of existing variables
+is at most equal to the input formula's number of logical gates
