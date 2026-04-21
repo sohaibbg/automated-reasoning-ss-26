@@ -1,0 +1,138 @@
+1. DIMACS file format
+example.cnf
+
+formula:
+(x1 ∨ x3 ∨ ¬x4) ∧ (x4) ∧ (x2 ∨ ¬x3)
+
+c Example CNF format file
+c
+p cnf 4 3
+1 3 -4 0
+4 0 2
+-3
+
+line starts with 'c' = comment
+only one line starting with 'p' after comments = problem line
+number 4 = number of variables, i.e. 1, 2, 3, 4
+number 3 = number of clauses, delimited by 0
+- = not
+
+2. CNF = set of set because of;
+Commutativity = order doesn't matter
+OR: x ∨ y = y ∨ x
+
+Associativity = grouping doesn't matter
+x ∨ (y ∨ z) = (x ∨ y) ∨ z
+
+Absorption = literal dominates over next clause if operators flipped
+A ∨ (A ∧ B) = A
+A ∧ (A ∨ B) = A
+
+3. Resolution: negating literals are like antimatter, collapse them into a union
+1 clause has literal x
+other clause has its negation
+resolvent = their union without that literal (and its negation)
+
+4. CNF = {} = T
+DNF = {} = ⊥
+
+5. "Unit" resolution = resolution where first clause a literal
+first clause vanishes, taking its negation from the second clause
+
+6. Boolean Constraint Propagation
+= unit resolve till the end
+for x in unitResolved(X):
+	F = F / clause.contains(x)
+	for f in F:
+		f = f / not x
+// x resolved = assume I(x) must = T
+// disjunctions with x = T resolve as T
+// disjunctions with (not x = F) so ignore (not x)
+
+7. "Pure" literal rule
+for l in literal:
+	l.isOnlyPositiveOrNegative
+	F.removeWhere( f.contains(l) )
+	// l/¬l = T is trivial assumption for proving SAT
+
+8. DP
+1. unit literal (del l, clauses with l, excise ¬l from clauses)
+2. pure literal (wholesale remove clauses with l/¬l)
+3. resolution (literal x as antimatter, union)
+
+single empty clause {} derived = UNSAT, otherwise SAT
+e.g. resolving (x),(¬x) derives empty clause => UNSAT
+but resolving (x) derivesempty CNF => SAT
+
+9. Case splitting
+pick literal x
+	case 1
+		assume I(x) = T
+			F = F/clause.contains(x)
+			F.forEach( f -> f.clauses.forEach( c.remove(¬x) ) )
+			empty clause = return false
+			empty F = return true
+	case 2
+		assume I(¬x) = T
+			F = F/clause.contains(¬x)
+			F.forEach( f -> f.clauses.forEach( c.remove(x) ) )
+			empty clause = return false
+			empty F = return true
+
+10. DPLL
+1. unit literal rule
+2. pure literal rule
+3. case splitting (instead of naive resolution)
+
+11. A Trail is a list of pairs
+T = [ (l1, g/d) ... (ln, g/d) ]
+ls are unique literals
+guessed/deduced
+
+12. iterativeDPLL():
+	trail.push( firstGuess )
+	loop:
+		if literals.noneLeft:
+			return SAT
+		if !deducedLiteral:
+			trail.push( guessedLiteral )
+			continue
+			
+		trail.push( deducedLiteral )
+		if !contradicts:
+			continue
+
+		if contradicts:
+			trail = trail.backtracked()
+			if trail.isEmpty: return UNSAT
+			continue
+	
+		throw UnreachableCodeException()
+
+13. backtrack():
+	loop:
+		if trail.isEmpty: return trail
+		if trail.last.isDeduced:
+			trail.pop()
+			continue
+		if trail.last.isGuessed:
+			trail.last = trail.last.negated()
+			trail.last = trail.last.flipTo( isDeduced )
+			return trail
+
+14. counter based data structures say
+clause C
+- counter nVariables
+- counter nTrue
+- counter nFalse
+UNSAT = nVariables == nFalse
+bypass = nTrue > 1
+unitResolve = nVariables - nFalse = 1
+
+15. efficiency for BCP = 3 hash maps
+1. Formula: clauseIndex to clauseLiteralSet
+	{ 1 : {p, q}, 2: {p} }
+2. LiteralToClause
+	{ p: {1, 2}, q: {2} }
+3. unitClauseIndexSet
+	{ 2 }
