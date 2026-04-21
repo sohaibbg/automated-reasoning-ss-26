@@ -1,21 +1,10 @@
-based on week1/AR-Intro.pdf
+1. boolean logic
+- a.k.a. propositional logic
+- based on atomic propositions that
+	evaluate to true or false.
+	combined using logical connectives: AND (∧) OR (∨) NOT (¬) IMPLIES (→)
 
-1. boolean logic (a.k.a. propositional logic) , the basic units are atomic propositions that are either true or false.
-
-2. You combine them using logical connectives: AND (∧) OR (∨) NOT (¬) IMPLIES (→)
-
-3. You cannot look inside propositions.
-
-You can’t express:
-
-who is raining
-which object is wet
-relationships like “all humans are mortal”
-
-Everything is a black box boolean variable.
-
-4. In first-order logic (FOL), you introduce:
-
+4. First-order logic is based on
 Predicates (properties/relations)
 Variables
 Quantifiers
