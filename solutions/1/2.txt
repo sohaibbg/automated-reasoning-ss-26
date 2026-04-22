@@ -1,0 +1,45 @@
+Q) Describe a method to convert a formula ϕ in CNF to an equisatisfiable formula ψ in 3-CNF such that if ϕ has n literals, then the number of literals in ψ is bounded by 3n. (Hint: take advantage of the resolution rule.)
+
+A)
+
+F(c): {
+	c.count == 0 : return UNSAT
+	c.count == 1 : eliminate unit literal
+	c.count == 2 : split2(), // 1 new literal per clause
+	c.count == 3 : c, // no new literals
+	c.count >= 4: split4OrMore() // see below
+}
+
+split2(p, q): { {p, q, r}, {p, q, not r} }
+
+split4OrMore():
+	n == 4
+	c1 = l1, l2, s0
+	c2 = not s0, l3, l4
+	
+	c2 = l2, l2, s0
+	c2 = not s0, l3, ***split here***, l4, l5
+	
+	when n == 4, tail is length 3
+	every additional literal makes the tail sequence 4
+	introducing new literal in the middle
+	introduces 2 new variables (si and its negation)
+	= 6 variables
+	split in half
+	3 variables come down to make the tail again
+	another new literal will make the tail 4-long and splittable to 6 again
+	∴ each new literal results in 1 new split literal
+	
+	n=4, s=1
+	n=5, s=2
+	n=6, s=3
+	...
+	split literals introduced per clause = n-3
+	number of clauses introduced per clause = s+1 = n-3+1 = n-2
+
+n literals
+	nC2^2 possible 2 literal clauses
+	nC2^2 max new literals for 2 literal long clauses
+for 4 or more literal long clauses
+	nCn
+	?
