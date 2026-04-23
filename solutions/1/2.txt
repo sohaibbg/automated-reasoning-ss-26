@@ -35,11 +35,5 @@ split4OrMore():
 	n=6, s=3
 	...
 	split literals introduced per clause = n-3
-	number of clauses introduced per clause = s+1 = n-3+1 = n-2
-
-n literals
-	nC2^2 possible 2 literal clauses
-	nC2^2 max new literals for 2 literal long clauses
-for 4 or more literal long clauses
-	nCn
-	?
+	variables introduced per clause of size n = 2s = 2n - 6
+	already existed n literals so 2n - 6 + n bounded by 3n
