@@ -1,0 +1,36 @@
+Q.)
+
+An n-cube is a three-dimensional grid where each side of the grid has n vertices. For example, the following figure shows a 3-cube: it has 3 vertices on each side of the grid and hence contains 3 ×3 ×3= 27 vertices.
+
+Please concretise the SAT reduction of Graph Colouring for n-cubes. (Concretising means that instead of writing v ∈V and (v,w) ∈E, you should explicitly specify how the values of v and w are determined in the formula description.)
+
+A.)
+
+n cube
+each side has n vertices
+n^3 vertices total
+m = n^3
+constraints;
+	each vertex has 1 color
+	for c in C where c is Z: x_0 or x_1 or ... or x_c
+	
+	vertex cannot have more than 1 color
+	for all ijk triples
+	(c^2)/2 pairs of not xijk(c1) or not xijk(c2)
+	
+	adjacent vertices cannot have the same color
+		vertice adjacency?
+		vertices have x, y, z components
+		model as i, j, k bec x taken for node
+		x(i, j, k, c) = x at i,j,k has color c
+	
+	back to adjacent vertices cannot have the same color
+	adjacent to x(i,j,k,c) are:
+		x(i+1,j,k,c)
+		x(i-1,j,k,c)
+		x(i,j+1,k,c)
+		x(i,j-1,k,c)
+		x(i,j,k+1,c)
+		x(i,j,k-1,c)
+	and over set of adjacents (not xijkc or not x from set)
+	removing non existent vertices is trivial
